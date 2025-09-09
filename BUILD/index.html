@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zenkai League CEO</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              'sans': ['Roboto', 'sans-serif'],
+              'orbitron': ['Orbitron', 'sans-serif'],
+            },
+            colors: {
+              'poke-red': '#ef5350',
+              'poke-blue': '#26c6da',
+              'poke-yellow': '#ffca28',
+              'poke-green': '#66bb6a',
+              'dark-1': '#1F2937',
+              'dark-2': '#374151',
+              'dark-3': '#4B5563',
+              'light-1': '#F9FAFB',
+              'light-2': '#E5E7EB',
+            },
+          }
+        }
+      }
+    </script>
+    <style>
+      :root {
+          --glow-color: #ef5350; /* poke-red */
+      }
+
+      @keyframes flash {
+        0%, 100% { background-color: transparent; }
+        50% { background-color: rgba(75, 85, 99, 0.9); } /* bg-dark-3 */
+      }
+      .animate-flash {
+        animation: flash 0.4s ease-out;
+      }
+      @keyframes zoomInFadeOut {
+        0% { transform: scale(0.5); opacity: 0; }
+        20% { transform: scale(1.1); opacity: 1; }
+        80% { transform: scale(0.95); opacity: 1; }
+        100% { transform: scale(1.5); opacity: 0; }
+      }
+      .animate-zoom {
+        animation: zoomInFadeOut 2.5s ease-in-out forwards;
+      }
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+      }
+      .animate-shake {
+          animation: shake 0.3s ease-in-out;
+      }
+      @keyframes feedbackZoom {
+        0% { transform: scale(0.5); opacity: 0; }
+        20% { transform: scale(1.2); opacity: 1; }
+        80% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(1); opacity: 0; }
+      }
+      .animate-feedback-zoom {
+        animation: feedbackZoom 1.5s ease-out forwards;
+      }
+      @keyframes pulseGlow {
+        0%, 100% {
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.4);
+            border-color: rgba(74, 222, 128, 0.6);
+        }
+        50% {
+            box-shadow: 0 0 25px rgba(74, 222, 128, 0.8);
+            border-color: rgba(74, 222, 128, 1);
+        }
+      }
+      @keyframes pulseStar {
+          0%, 100% { transform: scale(1); }
+          50% { transform: scale(1.2); }
+      }
+
+      /* Battle Animations */
+      @keyframes slide-in-left {
+          from { transform: translateX(-100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+      }
+      @keyframes slide-in-right {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+      }
+      .animate-slide-in-left { animation: slide-in-left 0.5s ease-out forwards; }
+      .animate-slide-in-right { animation: slide-in-right 0.5s ease-out forwards; }
+
+      @keyframes attack-left-to-right {
+          50% { transform: translate(60px, 0px) scale(1.5); z-index: 20; }
+          100% { transform: translate(0, 0) scale(1); z-index: auto; }
+      }
+      @keyframes attack-right-to-left {
+          50% { transform: translate(-60px, 0px) scale(1.5); z-index: 20; }
+          100% { transform: translate(0, 0) scale(1); z-index: auto; }
+      }
+      .battle-attacker-left { animation: attack-left-to-right 1s ease-in-out; }
+      .battle-attacker-right { animation: attack-right-to-left 1s ease-in-out; }
+
+      @keyframes damage-popup {
+          0% { transform: translateY(0) scale(0.8); opacity: 1; }
+          100% { transform: translateY(-60px) scale(1.2); opacity: 0; }
+      }
+      .animate-damage-popup {
+          animation: damage-popup 1s ease-out forwards;
+      }
+      
+      @keyframes result-zoom-in {
+          from { transform: scale(0.2); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+      }
+      .animate-result-zoom-in {
+          animation: result-zoom-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      }
+      .defeated-zenkai {
+        filter: grayscale(100%);
+        opacity: 0.6;
+        transition: filter 0.5s ease, opacity 0.5s ease;
+      }
+
+      /* Sidebar Styles */
+      .sidebar-gradient {
+        background: linear-gradient(180deg, #374151 0%, #1F2937 100%);
+      }
+      .nav-item {
+        position: relative;
+        transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+      }
+      .nav-item:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 15%;
+        height: 70%;
+        width: 4px;
+        background-color: var(--glow-color);
+        transform: scaleY(0);
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        border-radius: 0 4px 4px 0;
+        box-shadow: 0 0 15px var(--glow-color);
+      }
+      .nav-item.active {
+        background-color: rgba(239, 83, 80, 0.15); /* poke-red with alpha */
+        color: var(--glow-color);
+      }
+      .nav-item.active:before {
+        transform: scaleY(1);
+      }
+
+      /* Responsive Styles */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(180deg, #374151 0%, #1F2937 100%);
+        border-top: 1px solid #4B5563;
+        z-index: 50;
+        display: flex;
+        justify-content: space-around;
+        padding: 4px 0;
+      }
+      .bottom-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        padding: 4px;
+        font-size: 0.75rem;
+        line-height: 1rem;
+        color: #E5E7EB; /* light-2 */
+        transition: color 0.2s;
+      }
+      .bottom-nav-item.active {
+        color: #ef5350; /* poke-red */
+        --glow-color: #ef5350;
+        text-shadow: 0 0 8px var(--glow-color);
+      }
+      
+      @media (max-width: 768px) {
+        table.responsive-table thead {
+          display: none;
+        }
+        table.responsive-table, table.responsive-table tbody, table.responsive-table tr, table.responsive-table td {
+          display: block;
+          width: 100%;
+        }
+        table.responsive-table tr {
+          margin-bottom: 1rem;
+          border: 1px solid #4B5563;
+          border-radius: 0.5rem;
+          overflow: hidden;
+        }
+        table.responsive-table td {
+          text-align: right;
+          padding-left: 50%;
+          position: relative;
+          border-bottom: 1px solid #374151;
+        }
+        table.responsive-table td:last-child {
+          border-bottom: none;
+        }
+        table.responsive-table td:before {
+          content: attr(data-label);
+          position: absolute;
+          left: 0;
+          width: 45%;
+          padding-left: 1rem;
+          font-weight: bold;
+          text-align: left;
+          color: #9CA3AF;
+        }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "react/": "https://aistudiocdn.com/react@^19.1.1/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-dark-1 text-light-1 font-sans">
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
